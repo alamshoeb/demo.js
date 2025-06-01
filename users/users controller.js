@@ -39,7 +39,10 @@ const getuser = async(userid)=>{
 
 
 
-
+const getuserall = async()=>{
+    const data = await Users.findAll()
+    return data
+}
 
 
 
@@ -101,5 +104,5 @@ const assignroles = async (data)=>{
 
 
 module.exports = {
-    createuser,userlogin,updateuser,deluser,getuser,assignroles
+    createuser,userlogin,updateuser,deluser,getuser,assignroles,getuserall
 }
