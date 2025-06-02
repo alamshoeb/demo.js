@@ -1,3 +1,5 @@
+const { Payment } = require("../payment/payment model")
+const { Products } = require("../product/product model")
 const { Orders } = require("./order model")
 
 
@@ -31,8 +33,22 @@ const delorder = async (orid)=>{
 }
 
 
+const assignproducts = async (data)=>{
+    const x = await Orders.findOne({where : { id : data.orderid}})
+    const y = await Products.findOne({where : { id : data.productid}})
+    if(!x || !y){return null}
+    else{
+        const z = await x.addProducts(y)
+        return z
+    }
+}
+
+
+
+
+
 
 
 module.exports = {
-    ordercreate,updateorder,delorder,getorder
+    ordercreate,updateorder,delorder,getorder,assignproducts,
 }

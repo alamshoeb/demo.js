@@ -1,7 +1,7 @@
 
 
 const express = require("express")
-const { createproduct, updatepro, deletepro, getpro } = require("./product controller")
+const { createproduct, updatepro, deletepro, getpro, getallpro } = require("./product controller")
 const { authenticatejwt } = require("../passport/passport middleware")
 const { roleauthorization } = require("../roles/roleauthorization")
 
@@ -25,10 +25,17 @@ productrouter.delete("/:proid",authenticatejwt,roleauthorization(["product execu
     data ? res.status(200).json(data) : res.status(400).json({message : "error"})
 })
 
-productrouter.get("/:proid",async(req,res)=>{
+productrouter.get("/:proid",authenticatejwt,roleauthorization(["product executive"]),async(req,res)=>{
     const data = await getpro(Number(req.params.proid))
     data ? res.status(200).json({data}) : res.status(400).json({message : "error"})
 })
+
+
+productrouter.get("/all",async (req,res)=>{
+    const data = await getallpro()
+    data ? res.status(200).json({data}) : res.status(400).json({message : "no product found"})
+})
+
 
 
 module.exports={

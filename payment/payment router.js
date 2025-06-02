@@ -1,7 +1,7 @@
 
 
 const express = require("express");
-const { createpay, updatepay, getpay, delpay } = require("./payment controller");
+const { createpay, updatepay, getpay, delpay, assignorderwithpayment, assigproductwithpayment } = require("./payment controller");
 const { authenticatejwt } = require("../passport/passport middleware");
 const { roleauthorization } = require("../roles/roleauthorization");
 
@@ -32,6 +32,15 @@ payrouter.delete("/:payid",authenticatejwt,roleauthorization(["finance executive
     const data = await delpay(Number(req.params.payid))
     data ? res.status(200).json(data) : res.status(400).json({message : "error"})
 })
+
+
+
+payrouter.post("/assignprowithpay",async (req,res)=>{
+    const data = req.body
+    const newdata  = await assigproductwithpayment(data)
+   newdata ? res.status(200).json({newdata}) : res.status(400).json({message :"error"})
+})
+
 
 
 

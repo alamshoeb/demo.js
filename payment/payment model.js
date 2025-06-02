@@ -1,6 +1,7 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../database/config");
 const { Orders } = require("../order/order model");
+const { Products } = require("../product/product model");
 
 const Payment = sequelize.define("Payment",{
     id : { type : DataTypes.INTEGER,
@@ -20,8 +21,8 @@ const Payment = sequelize.define("Payment",{
 
 
 
-Orders.hasOne(Payment)
-Payment.belongsTo(Orders)
+Payment.hasMany(Products)
+Products.belongsTo(Payment)
 
 
 module.exports = {

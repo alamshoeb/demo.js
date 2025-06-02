@@ -34,6 +34,13 @@ const getpro = async(proid)=>{
 
 
 
+const getallpro = async ()=>{
+    const x = await Products.findAll()
+    return x
+}
+
+
+
 module.exports = {
-    createproduct,updatepro,deletepro,getpro
+    createproduct,updatepro,deletepro,getpro,getallpro
 }

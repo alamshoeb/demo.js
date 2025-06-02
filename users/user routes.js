@@ -1,6 +1,6 @@
 
 const express = require("express")
-const { createuser, userlogin, updateuser, deluser, getuser, assignroles, getuserall } = require("./users controller")
+const { createuser, userlogin, updateuser, deluser, getuser, assignroles, getuserall, assignorder } = require("./users controller")
 const { authenticatejwt } = require("../passport/passport middleware")
 const { roleauthorization } = require("../roles/roleauthorization")
 const { permisionauthorization } = require("../passport/permision/permisionauthorization")
@@ -31,7 +31,7 @@ userrouter.delete("/:userid",authenticatejwt,roleauthorization(["Admin"]),async(
 
 
 
-userrouter.get("/:userid",authenticatejwt,roleauthorization(["Admin"]),permisionauthorization(["getallusers"]),async(req,res)=>{
+userrouter.get("/:userid",async(req,res)=>{
     const data = await getuser(Number(req.params.userid))
     data ? res.status(200).json({data}) : res.status(400).json({message : "error"})
 })
@@ -51,7 +51,7 @@ userrouter.post("/login",async (req,res)=>{
 
 
 
-userrouter.post("/assign",authenticatejwt,roleauthorization(["Admin"]),async (req,res)=>{
+userrouter.post("/assignroles",async (req,res)=>{
     const data = await req.body 
     const result = await assignroles(data)
     result ? res.status(200).json({result}) : res.status(400).json({message : "error"})
@@ -65,6 +65,12 @@ userrouter.get("/all",async(req,res)=>{
 })
 
 
+
+userrouter.post("/assignorders",async (req,res)=>{
+    const data = await req.body 
+    const result = await assignorder(data)
+    result ? res.status(200).json({result}) : res.status(400).json({message : "error"})
+})
 
 
 

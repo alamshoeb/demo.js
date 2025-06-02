@@ -3,6 +3,9 @@ const { Users } = require("./users model")
 const jwt = require("jsonwebtoken")
 const { Roles } = require("../roles/roles model")
 const { Permision } = require("../passport/permision/permision model")
+const { Orders } = require("../order/order model")
+const { Payment } = require("../payment/payment model")
+const { Products } = require("../product/product model")
 
 
 const createuser = async (data)=>{
@@ -33,7 +36,7 @@ const deluser = async (userid)=>{
 
 
 const getuser = async(userid)=>{
-    const x = await Users.findOne({where : { id : userid , isActive : true},include : { model : Roles,include : { model : Permision}}})
+    const x = await Users.findOne({where : { id : userid , isActive : true},include : { model : Orders, include : { model : Products , include : { model : Payment}}}})
     return x
 }
 
@@ -99,10 +102,18 @@ const assignroles = async (data)=>{
 }
 
 
-
+const assignorder = async(data)=>{
+    const x = await Users.findOne({where : { id : data.userid}})
+    const y = await Orders.findOne({where : { id : data.orderid}})
+    if(!x || !y){return null}
+    else {
+        const z = x.addOrders(y)
+        return z
+    }
+}
 
 
 
 module.exports = {
-    createuser,userlogin,updateuser,deluser,getuser,assignroles,getuserall
+    createuser,userlogin,updateuser,deluser,getuser,assignroles,getuserall,assignorder
 }
