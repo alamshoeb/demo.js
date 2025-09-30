@@ -80,48 +80,83 @@ productapi()
 
 
 
-const addcartapi = async (productid)=>{
-  try {
-    const x = localStorage.getItem("userid")
-    const token = localStorage.getItem("token")
-  console.log(token);
-  
-    const payload = {
-    userid : x,
-    ProductId : productid,
-    quantity : 1
-  }
-  
-  const res = await  axios.post("http://localhost:3020/Cart/cart",payload ,{  headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },})
-  if(res.status===200){
-     const Toast = Swal.mixin({
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timer: 1000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      }
-    });
-    Toast.fire({
-      icon: "success",
-      title: "Add to card successfully"
-    
-    });
-  }else {
-    alert(res.data.message)
-  }
-  } catch (error) {
-    alert(error.message)
-  }
+const addcartapi = async (productid) => {
+    try {
+        const x = localStorage.getItem("userid")
+        const token = localStorage.getItem("token")
+        
+        // --- ADDED CHECK: Agar user logged in nahi hai (token ya userid nahi hai) ---
+        if (!x || !token) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Login Required',
+                text: 'Please log in to add items to your cart.',
+            });
+            return; // API call nahi karenge
+        }
+        // --------------------------------------------------------------------------
 
+        const payload = {
+            userid: x,
+            ProductId: productid,
+            quantity: 1
+        }
+
+        const res = await axios.post("http://localhost:3020/Cart/cart", payload, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        })
+
+        if (res.status === 200) {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 1000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "success",
+                title: "Add to cart successfully" // 'card' ko 'cart' kiya
+            });
+        } else {
+            // Agar API status 200 nahi hai, lekin try block mein hai (e.g., 400 status)
+            Swal.fire({
+                icon: 'warning',
+                title: 'Failed to Add',
+                text: res.data.message || 'Could not add item to cart.',
+            });
+        }
+
+    } catch (error) {
+        // --- FIX START: Alert ko Swal.fire se replace kiya ---
+        let errorMessage = "An error occurred. Please try again.";
+
+        if (error.response && error.response.data && error.response.data.message) {
+            // Server se aaye specific error message ko use kiya
+            errorMessage = error.response.data.message; 
+        } else if (error.message.includes('401') || error.message.includes('403')) {
+            // Agar network error message mein unauthorized status code dikhe
+            errorMessage = 'Session expired. Please log in again.';
+        } else {
+            // Network error ya koi aur client-side error
+             errorMessage = error.message; 
+        }
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Operation Failed',
+            text: errorMessage,
+        });
+        // --- FIX END ---
+    }
 }
-
 
   return (
     
