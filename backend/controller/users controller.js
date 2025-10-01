@@ -23,7 +23,7 @@ const createuser = async (data)=>{
            id : x.id,
            email : x.email,
            isactive : x.isActive,
-        },process.env.JWT_SECRET,{expiresIn : "2h"})
+        },process.env.JWT_SECRET,{expiresIn : "24h"})
         return {
                id : x.id,
                excesstoken : token
@@ -104,7 +104,7 @@ const userlogin = async(data)=>{
            isactive : checkdata.isActive,
         //    roles : rolearr,
         //    permisions : permisionarr
-        },process.env.JWT_SECRET,{expiresIn : "2h"})
+        },process.env.JWT_SECRET,{expiresIn : "24h"})
         return {
                id : checkdata.dataValues.id,
                excesstoken : token

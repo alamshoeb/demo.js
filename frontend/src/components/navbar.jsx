@@ -36,9 +36,9 @@ const Navbar = () => {
                 
                 <div className="container-fluid px-4"> 
                     
-                    {/* Brand Heading (Ab koi absolute positioning nahi) */}
-                    {/* Brand heading ko hamesha visible rakha */}
-                    <h1 className="navbar-brand m-0 fs-3 fw-bold me-auto me-lg-0">
+                    {/* Brand Heading */}
+                    {/* me-auto se left side par Brand heading aur right side par Toggler/Content ke beech space aayega */}
+                    <h1 className="navbar-brand m-0 fs-3 fw-bold me-auto"> 
                         <span className="text-info" style={{ fontFamily: 'Georgia, serif' }}>Men's</span> Wear Clothing
                     </h1>
                     
@@ -55,55 +55,61 @@ const Navbar = () => {
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     
-                    {/* Collapsible Content (Mobile par chhup jaata hai) */}
-                    {/* ms-auto se left links aur right buttons ke beech space aayega */}
-                    <div className="collapse navbar-collapse" id="responsiveNavbarContent">
+                    {/* Collapsible Content */}
+                    {/* Mobile par chhup jaata hai. Larger screens par, content right side par align hoga. */}
+                    <div className="collapse navbar-collapse justify-content-end" id="responsiveNavbarContent">
                         
-                        {/* Left Links */}
-                        <ul className="navbar-nav me-auto mb-2 mb-lg-0 fs-6"> 
-                            <li className="nav-item">
-                                <Link className="nav-link fw-semibold" to="/">Home</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link fw-semibold" to="/about">About</Link>
-                            </li>
-                        </ul>
-                        
-                        {/* Right Buttons - ms-auto se right align honge */}
-                        <div className="d-flex align-items-center ms-auto">
-                            
-                            {/* Cart Button */}
-                            <button 
-                                className="btn btn-outline-info me-2 my-2" 
-                                type="button"
-                                onClick={() => { navigate("/cart") }} 
-                            >
-                                <i className="bi bi-cart-fill me-1"></i> Cart
-                            </button>
+                        {/* Links aur Buttons ka container - Ismein Links aur Buttons dono aate hain */}
+                        <div className="d-flex flex-column flex-lg-row align-items-lg-center">
 
-                            {/* Login/Logout Logic */}
-                            {isUserLoggedIn ? (
+                            {/* Home/About Links */}
+                            {/* me-lg-4 se buttons se pehle thoda space milega large screens par. */}
+                            <ul className="navbar-nav me-lg-4 mb-2 mb-lg-0 fs-6"> 
+                                <li className="nav-item">
+                                    <Link className="nav-link fw-semibold" to="/">Home</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link fw-semibold" to="/about">About</Link>
+                                </li>
+                            </ul>
+                            
+                            {/* Cart aur Login/Logout Buttons */}
+                            <div className="d-flex align-items-center">
+                                
+                                {/* Cart Button */}
                                 <button 
-                                    className="btn btn-danger my-2" 
+                                    className="btn btn-outline-info me-2 my-2" 
                                     type="button"
-                                    onClick={handleLogout}
+                                    onClick={() => { navigate("/cart") }} 
                                 >
-                                    <i className="bi bi-box-arrow-right me-2"></i>Logout
+                                    {/* <i className="bi bi-cart-fill me-1"></i>  */} Cart
                                 </button>
-                            ) : (
-                                <button 
-                                    className="btn btn-primary my-2" 
-                                    type="button"
-                                    onClick={() => { navigate("/login") }}
-                                >
-                                    <i className="bi bi-person-circle me-2"></i>Login
-                                </button>
-                            )}
+
+                                {/* Login/Logout Logic */}
+                                {isUserLoggedIn ? (
+                                    <button 
+                                        className="btn btn-danger my-2" 
+                                        type="button"
+                                        onClick={handleLogout}
+                                    >
+                                        {/* <i className="bi bi-box-arrow-right me-2"></i> */}Logout
+                                    </button>
+                                ) : (
+                                    <button 
+                                        className="btn btn-primary my-2" 
+                                        type="button"
+                                        onClick={() => { navigate("/login") }}
+                                    >
+                                        {/* <i className="bi bi-person-circle me-2"></i> */}Login
+                                    </button>
+                                )}
+                            </div>
                         </div>
                     </div>
                     
                 </div>
             </nav>
+            {/* Search Bar ko Navbar ke bahar rakha hai, agar yeh main component mein hai toh. */}
         </div>
     );
 }
